@@ -20,6 +20,7 @@ import com.example.d26m01y22.tabales.Workers;
 
 import java.util.ArrayList;
 
+import static com.example.d26m01y22.tabales.Workers.KEY_ID;
 import static com.example.d26m01y22.tabales.Workers.TABLE_WORKERS;
 
 /**
@@ -45,6 +46,7 @@ public class activity_input_worker extends AppCompatActivity {
     String[] columns = {"PERSONAL_ID","CARD_ID"};
     String selectionId = Workers.PERSONAL_ID+"=?";
 
+    int key;
     static int mode;
     static boolean fistStep = true;
     static String personal_id,card_id,first_name,last_name, worker_company,phone_number;
@@ -140,7 +142,7 @@ public class activity_input_worker extends AppCompatActivity {
         String[]result = new String[8];
         db=hlp.getReadableDatabase();
         crsr = db.query(TABLE_WORKERS, null, selectionId, selectionArg, null, null, null);
-        int col = crsr.getColumnIndex(Workers.KEY_ID);
+        int col = crsr.getColumnIndex(KEY_ID);
         int col1 = crsr.getColumnIndex(Workers.PERSONAL_ID);
         int col2 = crsr.getColumnIndex(Workers.CARD_ID);
         int col3 = crsr.getColumnIndex(Workers.NAME);
@@ -205,7 +207,7 @@ public class activity_input_worker extends AppCompatActivity {
      * @param	fn Description	String fist name
      * @param	ln Description	String last name
      * @param	wc Description	String worker company
-     * @return true/false Description false - cannot save, true - can save
+     * @return true/false Description false - cannot save, true - can save.
      */
     public boolean check_inputs(String id, String cId, String fn, String ln, String wc){
         if (id.length() == 0 || !check_id(id) || cId.length() == 0 || fn.length() == 0 || ln.length() == 0 || wc.length() == 0 || isAlreadyExist(id,cId) !=0){
@@ -262,6 +264,42 @@ public class activity_input_worker extends AppCompatActivity {
         }else{
             return false;
         }
+    }
+    public void update_worker_details(){
+        int isWorking;
+        personal_id = pId.getText().toString();
+        card_id = cId.getText().toString();
+        first_name = firstNameField.getText().toString();
+        last_name = lastNameField.getText().toString();
+        worker_company = comp.getText().toString();
+        phone_number = phone_numberField.getText().toString();
+        if (workMode.isChecked()){
+            isWorking = 0;
+        }else{
+            isWorking = 1;
+        }
+        if ( first_name.length() == 0 || last_name.length() == 0 || worker_company.length() == 0){
+            popErrorMassage();
+            return;
+        }
+        db = hlp.getWritableDatabase();
+        db.delete(TABLE_WORKERS, KEY_ID+"=?", new String[]{Integer.toString(key)});
+        db.close();
+
+        ContentValues cv = new ContentValues();
+        cv.put(Workers.CARD_ID,card_id);
+        cv.put(Workers.LAST_NAME,last_name);
+        cv.put(Workers.NAME,first_name);
+        cv.put(Workers.WORKER_COMPANY,worker_company);
+        cv.put(Workers.PERSONAL_ID,personal_id);
+        cv.put(Workers.PHONE_NUMBER,phone_number);
+        cv.put(Workers.IS_WORKING,isWorking);
+        db = hlp.getWritableDatabase();
+
+        db.insert(TABLE_WORKERS, null, cv);
+
+        db.close();
+        finish();
     }
     /**
      * pop error alert dialog massage to the user
@@ -327,6 +365,7 @@ public class activity_input_worker extends AppCompatActivity {
                         }
                         pId.setFocusable(false);
                         cId.setFocusable(false);
+                        key = Integer.parseInt(details[0]);
                         saveAndContinue.setText("save");
                         fistStep = false;
                     }else{
@@ -336,7 +375,7 @@ public class activity_input_worker extends AppCompatActivity {
                     popErrorMassage();
                 }
             }else{
-                //tomorrow
+                update_worker_details();
             }
 
         }
