@@ -15,6 +15,7 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
 
     public HelperDB(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
 
     @Override
