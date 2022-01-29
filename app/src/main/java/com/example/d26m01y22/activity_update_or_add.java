@@ -38,13 +38,29 @@ public class activity_update_or_add extends AppCompatActivity {
         si.putExtra("mode",1);
         startActivity(si);
     }
-
+    /**
+     * click the button will take the user to add a new food company
+     * mode 0 = add food company
+     * mode 1 = update food company details
+     * same screen to those two goals.
+     * <p>
+     *
+     * @param	view Description	button add food company
+     */
     public void add_food_company(View view) {
         Intent si = new Intent(this,activity_input_company.class);
         si.putExtra("mode",0);
         startActivity(si);
     }
-
+    /**
+     * click the button will take the user to update food company details
+     * mode 0 = add food company
+     * mode 1 = update food company details
+     * same screen to those two goals.
+     * <p>
+     *
+     * @param	view Description	button update food company
+     */
     public void update_fc_details(View view) {
         Intent si = new Intent(this,activity_input_company.class);
         si.putExtra("mode",1);
