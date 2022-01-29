@@ -30,7 +30,7 @@
             android:layout_weight="5"
             android:fontFamily="serif"
             android:gravity="center"
-            android:text="add or update Details of: worker"
+            android:text="add or update Details of: workers"
             android:textColor="#F3AE98"
             android:textSize="20sp" />
 
