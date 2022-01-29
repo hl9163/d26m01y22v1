@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
 
 import static com.example.d26m01y22.tabales.Workers.*;
+import static com.example.d26m01y22.tabales.FoodCompany.*;
 
 public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
     private static final String DATABASE_NAME = "dbexam.db";
@@ -29,12 +30,25 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         strCreate+=" "+IS_WORKING+" INTEGER";
         strCreate+=");";
         db.execSQL(strCreate);
+
+        strCreate="CREATE TABLE "+TABLE_FOOD_COMPANY;
+        strCreate+=" ("+KEY_ID_Food+" INTEGER PRIMARY KEY,";
+        strCreate+=" "+COMPANY_NUMBER+" TEXT,";
+        strCreate+=" "+COMPANY_NAME+" TEXT,";
+        strCreate+=" "+C_FIRST_PHONE_NUMBER+" TEXT,";
+        strCreate+=" "+C_SECOND_PHONE_NUMBER+" TEXT";
+        strCreate+=");";
+        db.execSQL(strCreate);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         strDelete="DROP TABLE IF EXISTS "+TABLE_WORKERS;
         db.execSQL(strDelete);
+        strDelete="DROP TABLE IF EXISTS "+TABLE_FOOD_COMPANY;
+        db.execSQL(strDelete);
+
+        onCreate(db);
 
     }
 }
