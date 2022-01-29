@@ -1,6 +1,7 @@
 package com.example.d26m01y22.tabales;
 
 public class Workers {
+
     public static final String TABLE_WORKERS = "Workers";
     public static final String KEY_ID = "_id";
     public static final String CARD_ID="CARD_ID";
