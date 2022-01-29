@@ -20,8 +20,12 @@ import com.example.d26m01y22.tabales.FoodCompany;
 import java.util.ArrayList;
 
 import static com.example.d26m01y22.tabales.FoodCompany.*;
-import static com.example.d26m01y22.tabales.Workers.TABLE_WORKERS;
-
+/**
+ * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
+ * @version	1.0
+ * @since		29/01/2022
+ * input a new company or update detail screen
+ */
 public class activity_input_company extends AppCompatActivity {
     int mode;
     String company_name, company_id, phone_number, second_phone_number;
@@ -65,6 +69,13 @@ public class activity_input_company extends AppCompatActivity {
             title.setText("edit food company details:");
         }
     }
+    /**
+     * check if the company Id and company Name are exist in the database
+     * <p>
+     *
+     * @param	companyId Description	String personal Id
+     * @param companyName Description String card Id
+     */
     public int isAlreadyExist(String companyId, String companyName){
         int good = 0;
         company_id_tb = new ArrayList<>();
@@ -116,7 +127,11 @@ public class activity_input_company extends AppCompatActivity {
         ad.show();
 
     }
-
+    /**
+     * save the data of a new food company on the database
+     * <p>
+     *
+     */
     public void save_data() {
         company_id = company_id_field.getText().toString();
         company_name = company_name_field.getText().toString();
@@ -142,12 +157,24 @@ public class activity_input_company extends AppCompatActivity {
             popErrorMassage();
         }
     }
+    /**
+     * check if the program can save data in the database.
+     * by checking the length of each parameter is bigger then 0 and the id  and/ or company name is possible
+     * <p>
+     *
+     * @return true/false Description false - cannot save, true - can save.
+     */
     public boolean check_inputs(){
         if (company_id.length() == 0 || company_name.length() == 0 || phone_number.length() == 0 || isAlreadyExist(company_id,company_name) !=0){
             return false;
         }
         return true;
     }
+    /**
+     * back to menu
+     * <p>
+     * @param view button
+     */
     public void back_to_main_menu(View view) {
         finish();
     }
