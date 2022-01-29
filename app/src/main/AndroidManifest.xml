@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.D26m01y22">
-        <activity android:name=".activity_input_worker"></activity>
+        <activity android:name=".activity_input_company"></activity>
+        <activity android:name=".activity_input_worker" />
         <activity android:name=".activity_update_or_add" />
         <activity android:name=".showDetailsMenuActivity" />
         <activity android:name=".MainActivity">
