@@ -47,6 +47,7 @@ public class activity_input_worker extends AppCompatActivity {
     String selectionId = Workers.PERSONAL_ID+"=?";
 
     int key;
+
     static int mode;
     static boolean fistStep = true;
     static String personal_id,card_id,first_name,last_name, worker_company,phone_number;
@@ -267,7 +268,7 @@ public class activity_input_worker extends AppCompatActivity {
         }
     }
     /**
-     * save all the updated info of a worker by removing there line and rewrite the info.
+     * save all the updated info of a worker by removing there line and rewrite the info
      * <p>
      *
      */
