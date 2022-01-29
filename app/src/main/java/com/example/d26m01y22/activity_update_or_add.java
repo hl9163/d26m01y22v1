@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
- * @version	1.0
+ * @version	1.4
  * @since		27/01/2022
  * side menu that the user need to choose what he want to add or update
  */
@@ -40,10 +40,15 @@ public class activity_update_or_add extends AppCompatActivity {
     }
 
     public void add_food_company(View view) {
-
+        Intent si = new Intent(this,activity_input_company.class);
+        si.putExtra("mode",0);
+        startActivity(si);
     }
 
     public void update_fc_details(View view) {
+        Intent si = new Intent(this,activity_input_company.class);
+        si.putExtra("mode",1);
+        startActivity(si);
     }
 
     public void back_to_main_menu(View view) {
