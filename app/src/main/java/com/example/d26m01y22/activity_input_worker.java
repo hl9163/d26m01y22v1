@@ -56,6 +56,7 @@ public class activity_input_worker extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_worker);
 
+        fistStep = true;
         hlp = new HelperDB(this);
         db = hlp.getWritableDatabase();
         db.close();
