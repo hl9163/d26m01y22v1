@@ -25,7 +25,7 @@ import static com.example.d26m01y22.tabales.Workers.TABLE_WORKERS;
 
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
- * @version	1.5
+ * @version	2.0
  * @since		27/01/2022
  * add or update worker details
  */
@@ -388,6 +388,11 @@ public class activity_input_worker extends AppCompatActivity {
         }
 
     }
+    /**
+     * back to menu
+     * <p>
+     * @param view button
+     */
     public void back_to_main_menu(View view) {
         finish();
     }
