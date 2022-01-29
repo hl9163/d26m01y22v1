@@ -266,6 +266,11 @@ public class activity_input_worker extends AppCompatActivity {
             return false;
         }
     }
+    /**
+     * save all the updated info of a worker by removing there line and rewrite the info.
+     * <p>
+     *
+     */
     public void update_worker_details(){
         int isWorking;
         personal_id = pId.getText().toString();
