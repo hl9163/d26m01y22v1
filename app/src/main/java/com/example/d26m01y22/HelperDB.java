@@ -37,7 +37,8 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         strCreate+=" "+COMPANY_NUMBER+" TEXT,";
         strCreate+=" "+COMPANY_NAME+" TEXT,";
         strCreate+=" "+C_FIRST_PHONE_NUMBER+" TEXT,";
-        strCreate+=" "+C_SECOND_PHONE_NUMBER+" TEXT";
+        strCreate+=" "+C_SECOND_PHONE_NUMBER+" TEXT,";
+        strCreate+=" "+IS_WORKING_COMPANY+" INTEGER";
         strCreate+=");";
         db.execSQL(strCreate);
     }
