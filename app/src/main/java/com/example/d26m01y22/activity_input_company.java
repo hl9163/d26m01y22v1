@@ -122,9 +122,11 @@ public class activity_input_company extends AppCompatActivity {
         return good;
     }
     /**
-     * pop error alert dialog massage to the user
+     * read a line from the database by existing food company id
      * <p>
      *
+     * @param	id Description	String food company id
+     * @return  String[]result Description include all the details  [KEY_ID, COMPANY_NUMBER, COMPANY_NAME, C_FIRST_PHONE_NUMBER, C_SECOND_PHONE_NUMBER, IS_WORKING_COMPANY, IS_WORKING_COMPANY]
      */
     public String[] readById(String id){
         String[]selectionArg = {id};
@@ -148,6 +150,11 @@ public class activity_input_company extends AppCompatActivity {
         db.close();
         return result;
     }
+    /**
+     * pop error alert dialog massage to the user
+     * <p>
+     *
+     */
     public void popErrorMassage(){
         adb = new AlertDialog.Builder(this);
         adb.setCancelable(false);
@@ -194,6 +201,11 @@ public class activity_input_company extends AppCompatActivity {
             popErrorMassage();
         }
     }
+    /**
+     * save all the updated info of a food company by removing there line and rewrite the info
+     * <p>
+     *
+     */
     public void update_food_company_details(){
         int isWorking;
         company_id = company_id_field.getText().toString();
@@ -249,6 +261,15 @@ public class activity_input_company extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * for each mode it is changing - mode 0 - add food company -
+     * on click it will begin the saving posses and jump to save_data() function
+     * if the code is run on mode 1 - update food company details - the process dividing to two parts:
+     * part one is enter only the id and the name.
+     * second part is show the user all the current food company data in the right place and save when he click save.
+     * <p>
+     *
+     */
     public void saveWorker(View view) {
         if (mode == 0){
             save_data();
