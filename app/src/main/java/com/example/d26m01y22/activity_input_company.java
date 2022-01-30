@@ -217,7 +217,7 @@ public class activity_input_company extends AppCompatActivity {
         }else{
             isWorking = 1;
         }
-        if (company_name.length() == 0 || phone_number.length() == 0){
+        if (company_name.length() == 0 || phone_number.length() == 0 || phone_number.equals(second_phone_number)){
             popErrorMassage();
             return;
         }
