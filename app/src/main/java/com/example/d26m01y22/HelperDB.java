@@ -33,7 +33,7 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         db.execSQL(strCreate);
 
         strCreate="CREATE TABLE "+TABLE_FOOD_COMPANY;
-        strCreate+=" ("+KEY_ID_Food+" INTEGER PRIMARY KEY,";
+        strCreate+=" ("+ KEY_ID_FoodC +" INTEGER PRIMARY KEY,";
         strCreate+=" "+COMPANY_NUMBER+" TEXT,";
         strCreate+=" "+COMPANY_NAME+" TEXT,";
         strCreate+=" "+C_FIRST_PHONE_NUMBER+" TEXT,";
