@@ -11,8 +11,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.d26m01y22.tabales.FoodCompany;
@@ -22,17 +24,20 @@ import java.util.ArrayList;
 import static com.example.d26m01y22.tabales.FoodCompany.*;
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
- * @version	1.0
+ * @version	2.0
  * @since		29/01/2022
  * input a new company or update detail screen
  */
 public class activity_input_company extends AppCompatActivity {
-    int mode;
+    int mode,key;
     String company_name, company_id, phone_number, second_phone_number;
+    static boolean firstStep = true;;
 
-    LinearLayout serviceMode;
+    LinearLayout serviceMode,phoneLL, secondPhoneLL;
     TextView title;
     EditText company_name_field, company_id_field, phone_number_field, second_phone_number_field;
+    Button saveAndContinue;
+    Switch workMode;
 
     AlertDialog.Builder adb;
 
@@ -42,18 +47,25 @@ public class activity_input_company extends AppCompatActivity {
     ArrayList<String> company_id_tb = new ArrayList<>();
     ArrayList<String> company_name_tb = new ArrayList<>();
     String[] columns = {"COMPANY_NAME","COMPANY_NUMBER"};
+    String selectionId = COMPANY_NUMBER+"=?";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_company);
+        firstStep = true;
 
         serviceMode = (LinearLayout) findViewById(R.id.serviceLL);
+        phoneLL = (LinearLayout) findViewById(R.id.phone_numberLL);
+        secondPhoneLL = (LinearLayout) findViewById(R.id.second_phoneLL);
 
         company_id_field = (EditText) findViewById(R.id.Company_id);
         company_name_field = (EditText) findViewById(R.id.Company_name);
         phone_number_field = (EditText) findViewById(R.id.phone_num);
         second_phone_number_field = (EditText) findViewById(R.id.second_num);
+
+        workMode = (Switch) findViewById(R.id.switch2);
+        saveAndContinue = (Button) findViewById(R.id.saveAndContinueButtonFC);
 
         title = (TextView) findViewById(R.id.titleUpdateCompany);
         hlp = new HelperDB(this);
@@ -67,6 +79,9 @@ public class activity_input_company extends AppCompatActivity {
                title.setText("add a new food company:");
         }else if (mode == 1){
             title.setText("edit food company details:");
+            phoneLL.setVisibility(View.INVISIBLE);
+            secondPhoneLL.setVisibility(View.INVISIBLE);
+            saveAndContinue.setText("next");
         }
     }
     /**
@@ -111,6 +126,28 @@ public class activity_input_company extends AppCompatActivity {
      * <p>
      *
      */
+    public String[] readById(String id){
+        String[]selectionArg = {id};
+        String[]result = new String[6];
+        db=hlp.getReadableDatabase();
+        crsr = db.query(TABLE_FOOD_COMPANY, null, selectionId, selectionArg, null, null, null);
+        int col = crsr.getColumnIndex(KEY_ID_FoodC);
+        int col1 =crsr.getColumnIndex(FoodCompany.COMPANY_NUMBER);
+        int col2 = crsr.getColumnIndex(FoodCompany.COMPANY_NAME);
+        int col3 = crsr.getColumnIndex(FoodCompany.C_FIRST_PHONE_NUMBER);
+        int col4 = crsr.getColumnIndex(FoodCompany.C_SECOND_PHONE_NUMBER);
+        int col5 = crsr.getColumnIndex(FoodCompany.IS_WORKING_COMPANY);
+        crsr.moveToFirst();
+        result[0] = String.valueOf(crsr.getInt(col));
+        result[1] = crsr.getString(col1);
+        result[2] = crsr.getString(col2);
+        result[3] = crsr.getString(col3);
+        result[4] = crsr.getString(col4);
+        result[5] = String.valueOf(crsr.getInt(col5));
+        crsr.close();
+        db.close();
+        return result;
+    }
     public void popErrorMassage(){
         adb = new AlertDialog.Builder(this);
         adb.setCancelable(false);
@@ -157,6 +194,39 @@ public class activity_input_company extends AppCompatActivity {
             popErrorMassage();
         }
     }
+    public void update_food_company_details(){
+        int isWorking;
+        company_id = company_id_field.getText().toString();
+        company_name = company_name_field.getText().toString();
+        phone_number = phone_number_field.getText().toString();
+        second_phone_number = second_phone_number_field.getText().toString();
+        if (workMode.isChecked()){
+            isWorking = 0;
+        }else{
+            isWorking = 1;
+        }
+        if (company_name.length() == 0 || phone_number.length() == 0){
+            popErrorMassage();
+            return;
+        }
+        db = hlp.getWritableDatabase();
+        db.delete(TABLE_FOOD_COMPANY, KEY_ID_FoodC +"=?", new String[]{Integer.toString(key)});
+        db.close();
+
+        ContentValues cv = new ContentValues();
+        cv.put(FoodCompany.COMPANY_NAME,company_name);
+        cv.put(FoodCompany.COMPANY_NUMBER,company_id);
+        cv.put(FoodCompany.C_FIRST_PHONE_NUMBER,phone_number);
+        cv.put(FoodCompany.C_SECOND_PHONE_NUMBER,second_phone_number);
+        cv.put(FoodCompany.IS_WORKING_COMPANY,isWorking);
+        db = hlp.getWritableDatabase();
+
+        db.insert(TABLE_FOOD_COMPANY, null, cv);
+
+        db.close();
+        finish();
+
+    }
     /**
      * check if the program can save data in the database.
      * by checking the length of each parameter is bigger then 0 and the id  and/ or company name is possible
@@ -165,7 +235,7 @@ public class activity_input_company extends AppCompatActivity {
      * @return true/false Description false - cannot save, true - can save.
      */
     public boolean check_inputs(){
-        if (company_id.length() == 0 || company_name.length() == 0 || phone_number.length() == 0 || isAlreadyExist(company_id,company_name) !=0){
+        if (company_id.length() == 0 || company_name.length() == 0 || phone_number.length() == 0 || isAlreadyExist(company_id,company_name) !=0 || phone_number.equals(second_phone_number)){
             return false;
         }
         return true;
@@ -182,6 +252,37 @@ public class activity_input_company extends AppCompatActivity {
     public void saveWorker(View view) {
         if (mode == 0){
             save_data();
+        }else if(mode == 1){
+            if(firstStep){
+                company_id = company_id_field.getText().toString();
+                company_name = company_name_field.getText().toString();
+                if (isAlreadyExist(company_id,company_name) == 2){
+                    String[]details = readById(company_id);
+                    if (details[2].equals(company_name)){
+                        phoneLL.setVisibility(View.VISIBLE);
+                        secondPhoneLL.setVisibility(View.VISIBLE);
+                        serviceMode.setVisibility(View.VISIBLE);
+                        phone_number_field.setText(details[3]);
+                        second_phone_number_field.setText(details[4]);
+                        int wM = Integer.parseInt(details[5]);
+                        if (wM == 1){
+                            workMode.setChecked(false);
+                        }else{
+                            workMode.setChecked(true);
+                        }
+                        key = Integer.parseInt(details[0]);
+                        company_id_field.setFocusable(false);
+                        saveAndContinue.setText("save");
+                        firstStep = false;
+                    }else{
+                        popErrorMassage();
+                    }
+                }else{
+                    popErrorMassage();
+                }
+            }else{
+                update_food_company_details();
+            }
         }
     }
 }
