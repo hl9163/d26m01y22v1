@@ -161,6 +161,8 @@ public class activity_input_worker extends AppCompatActivity {
         result[5] = crsr.getString(col5);
         result[6] = crsr.getString(col6);
         result[7] = String.valueOf(crsr.getInt(col7));
+        crsr.close();
+        db.close();
         return result;
     }
     /**
