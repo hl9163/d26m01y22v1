@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
- * @version	1.4
+ * @version	2.0
  * @since		27/01/2022
  * side menu that the user need to choose what he want to add or update
  */

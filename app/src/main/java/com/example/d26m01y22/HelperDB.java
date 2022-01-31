@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import static com.example.d26m01y22.tabales.Workers.*;
 import static com.example.d26m01y22.tabales.FoodCompany.*;
 import static com.example.d26m01y22.tabales.Meals.*;
+import static com.example.d26m01y22.tabales.Order_Details.*;
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
  * @version	3.0
@@ -39,7 +40,7 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         db.execSQL(strCreate);
 
         strCreate="CREATE TABLE "+TABLE_FOOD_COMPANY;
-        strCreate+=" ("+ KEY_ID_FoodC +" INTEGER PRIMARY KEY,";
+        strCreate+=" ("+KEY_ID_FoodC+" INTEGER PRIMARY KEY,";
         strCreate+=" "+COMPANY_NUMBER+" TEXT,";
         strCreate+=" "+COMPANY_NAME+" TEXT,";
         strCreate+=" "+C_FIRST_PHONE_NUMBER+" TEXT,";
@@ -49,13 +50,25 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         db.execSQL(strCreate);
 
         strCreate="CREATE TABLE "+TABLE_MEALS;
-        strCreate+=" ("+ KEY_ID_Meals +" INTEGER PRIMARY KEY,";
+        strCreate+=" ("+KEY_ID_MEALS+" INTEGER PRIMARY KEY,";
         strCreate+=" "+APPETIZER+" TEXT,";
         strCreate+=" "+MAIN_COURSE+" TEXT,";
         strCreate+=" "+EXTRA+" TEXT,";
-        strCreate+=" "+DESSERT+" TEXT";
+        strCreate+=" "+DESSERT+" TEXT,";
+        strCreate+=" "+DRINK+" TEXT";
         strCreate+=");";
         db.execSQL(strCreate);
+
+        strCreate="CREATE TABLE "+TABLE_ORDER_DETAILS;
+        strCreate+=" ("+KEY_ID_OD+" INTEGER PRIMARY KEY,";
+        strCreate+=" "+DATE+" TEXT,";
+        strCreate+=" "+TIME+" TEXT,";
+        strCreate+=" "+WORKER_ID+" TEXT,";
+        strCreate+=" "+FFOOD_COMPANY+" TEXT";
+        strCreate+=");";
+        db.execSQL(strCreate);
+
+
     }
 
     @Override
@@ -64,8 +77,12 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         db.execSQL(strDelete);
         strDelete="DROP TABLE IF EXISTS "+TABLE_FOOD_COMPANY;
         db.execSQL(strDelete);
+
         strDelete="DROP TABLE IF EXISTS "+TABLE_MEALS;
         db.execSQL(strDelete);
+        strDelete="DROP TABLE IF EXISTS "+TABLE_ORDER_DETAILS;
+        db.execSQL(strDelete);
+
 
         onCreate(db);
 
