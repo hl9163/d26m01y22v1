@@ -32,10 +32,22 @@ public class activity_update_or_add extends AppCompatActivity {
         si.putExtra("mode",0);
         startActivity(si);
     }
-
+    /**
+     * click the button will take the user to update a worker
+     * mode 0 = add worker
+     * mode 1 = update worker details
+     * same screen to those two goals.
+     * <p>
+     *
+     * @param	view Description	button add worker
+     */
     public void update_worker(View view) {
         Intent si = new Intent(this,activity_input_worker.class);
         si.putExtra("mode",1);
+        startActivity(si);
+    }
+    public void make_new_order(View view) {
+        Intent si = new Intent(this,activity_input_meal.class);
         startActivity(si);
     }
     /**
@@ -70,4 +82,6 @@ public class activity_update_or_add extends AppCompatActivity {
     public void back_to_main_menu(View view) {
         finish();
     }
+
+
 }

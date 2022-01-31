@@ -93,7 +93,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="10"
                 android:onClick="add_food_company"
-                android:text="add food company"
+                android:text="add food company(f.c)"
                 tools:ignore="OnClick" />
 
             <Space
