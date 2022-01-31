@@ -8,7 +8,12 @@ import androidx.annotation.Nullable;
 import static com.example.d26m01y22.tabales.Workers.*;
 import static com.example.d26m01y22.tabales.FoodCompany.*;
 import static com.example.d26m01y22.tabales.Meals.*;
-
+/**
+ * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
+ * @version	3.0
+ * @since		27/01/2022
+ * database helper
+ */
 public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
     private static final String DATABASE_NAME = "dbexam.db";
     private static final int DATABASE_VERSION = 1;
