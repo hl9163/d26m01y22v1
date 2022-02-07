@@ -8,7 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-
+/**
+ * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
+ * @version	2.0
+ * @since		31/01/2022
+ * input screen for all the meal details and move it to the next screen
+ */
 public class activity_input_meal extends AppCompatActivity {
     String appetizer,main_course,extra,dessert,drink;
     EditText app,mC,ex,des,dri;
@@ -26,11 +31,21 @@ public class activity_input_meal extends AppCompatActivity {
         dri = (EditText) findViewById(R.id.drinkF);
     }
 
-
+    /**
+     * back to last screen
+     * <p>
+     * @param view back button
+     *
+     */
     public void back_to_main_menu(View view) {
         finish();
     }
 
+    /**
+     * check if the user entered
+     * <p>
+     *
+     */
     public boolean check_input(){
         if (main_course.length() == 0){
             return false;
@@ -59,7 +74,13 @@ public class activity_input_meal extends AppCompatActivity {
         ad.show();
 
     }
-
+    /**
+     * continue to the next input screen.
+     * in addition it move the last information to the next screen to continue the
+     * order (input more details).
+     * <p>
+     *
+     */
     public void continueToNextPart(View view) {
         appetizer = app.getText().toString();
         main_course = mC.getText().toString();
