@@ -6,5 +6,5 @@ public class Order_Details {
     public static final String DATE ="DATE";
     public static final String TIME ="TIME";
     public static final String WORKER_ID ="WORKER_ID";
-    public static final String FFOOD_COMPANY ="FFOOD_COMPANY";
+    public static final String FOOD_COMPANY ="FFOOD_COMPANY";
 }
