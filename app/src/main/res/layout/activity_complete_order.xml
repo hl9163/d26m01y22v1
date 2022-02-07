@@ -93,6 +93,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:ems="10"
+                android:hint="dd/mm/yy"
                 android:inputType="date" />
         </LinearLayout>
 
@@ -117,6 +118,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:ems="10"
+                android:hint="hh:mm"
                 android:inputType="time" />
         </LinearLayout>
 
