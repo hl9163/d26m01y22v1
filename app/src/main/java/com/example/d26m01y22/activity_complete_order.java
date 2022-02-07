@@ -2,7 +2,9 @@ package com.example.d26m01y22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,10 +26,16 @@ import static com.example.d26m01y22.tabales.Order_Details.TABLE_ORDER_DETAILS;
 import static com.example.d26m01y22.tabales.Workers.*;
 
 import java.util.ArrayList;
-
+/**
+ * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
+ * @version	2.0
+ * @since		31/01/2022
+ * input screen for all details that left to input (id, food company, time and date)
+ */
 public class activity_complete_order extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner companyView;
     EditText workerIdF, dateF, timeF;
+    AlertDialog.Builder adb;
 
     SQLiteDatabase db;
     HelperDB hlp;
@@ -39,6 +47,7 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
 
     String appetizer,main_course,extra,dessert,drink;
     String company, workerId, date, time;
+    boolean returnMain = false;
 
 
     @Override
@@ -71,6 +80,11 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
 
 
     }
+    /**
+     * make to the spinner the list of companies.
+     * <p>
+     *
+     */
     public void showCompanies(){
         db = hlp.getWritableDatabase();
         crsr = db.query(TABLE_FOOD_COMPANY,columnsCompany,null,null,null,null,null);
@@ -87,7 +101,11 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
                 R.layout.support_simple_spinner_dropdown_item,companyNames);
         companyView.setAdapter(adp);
     }
-
+    /**
+     * save the meal details
+     * <p>
+     *
+     */
     public void save_meal(){
         ContentValues cv = new ContentValues();
         cv.put(Meals.APPETIZER,appetizer);
@@ -101,19 +119,29 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
 
         db.close();
     }
+    /**
+     * save the other details
+     * <p>
+     *
+     */
     public void save_details(){
         ContentValues cv = new ContentValues();
         cv.put(Order_Details.DATE,date);
         cv.put(Order_Details.TIME,time);
         cv.put(Order_Details.WORKER_ID,workerId);
-        cv.put(Order_Details.FFOOD_COMPANY,company);
+        cv.put(Order_Details.FOOD_COMPANY,company);
         db = hlp.getWritableDatabase();
 
         db.insert(TABLE_ORDER_DETAILS, null, cv);
 
         db.close();
     }
-
+    /**
+     * check if a worker is exist in the database
+     * <p>
+     *
+     * @param worker worker to search in the database
+     */
     public boolean isAlreadyExist(String worker){
         worker_id_tb = new ArrayList<>();
         db = hlp.getWritableDatabase();
@@ -134,6 +162,11 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
         }
         return false;
     }
+    /**
+     * check if the date that the user entered is legal
+     * <p>
+     *
+     */
     public boolean check_date(){
         String dd;
         String mm;
@@ -162,6 +195,12 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
         }
         return true;
     }
+    /**
+     * check if num is number
+     * <p>
+     * @param num string num to check if it is a number
+     *
+     */
     public boolean is_number(String num){
         try {
             int value = Integer.parseInt(num);
@@ -170,6 +209,11 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
             return false;
         }
     }
+    /**
+     * check if the time that the user entered is legal (and in the noon(; )
+     * <p>
+     *
+     */
     public boolean check_time(){
         String hh;
         String mm;
@@ -193,28 +237,69 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
         }
         return true;
     }
+    /**
+     * check if the input that the user entered is legal
+     * <p>
+     *
+     */
     public boolean check_input(){
         if (company.equals("None") || !check_date() || !check_time() || !isAlreadyExist(workerId)){
             return false;
         }
         return true;
     }
+    /**
+     * pop error alert dialog massage to the user
+     * <p>
+     *
+     */
+    public void popErrorMassage(){
+        adb = new AlertDialog.Builder(this);
+        adb.setCancelable(false);
+        adb.setTitle("wrong input!");
+        adb.setMessage("you entered wrong input to one or more of the input fields");
+        adb.setNegativeButton("close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                returnMain =true;
 
+                dialog.dismiss();
 
+            }
+        });
+        AlertDialog ad = adb.create();
+        ad.show();
+
+    }
+
+    /**
+     * spinner input
+     * <p>
+     *
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position != 0){
-            company = companyNames.get(position-1);
+            company = companyNames.get(position);
         }else{
             company = "None";
         }
     }
-
+    /**
+     * spinner input
+     * <p>
+     *
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        company = "None";
     }
-
+    /**
+     * save order including checking the input and return to the main menu.
+     * <p>
+     * @param view save button
+     *
+     */
     public void save_order(View view) {
         workerId = workerIdF.getText().toString();
         date = dateF.getText().toString();
@@ -222,11 +307,20 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
         if (check_input()){
             save_details();
             save_meal();
-            Intent si = new Intent(this,MainActivity.class);
-            startActivity(si);
-        }
-    }
+            returnMain =true;
 
+        }else{
+            popErrorMassage();
+        }
+        Intent si = new Intent(this,MainActivity.class);
+        startActivity(si);
+
+    }
+    /**
+     * back without saving
+     * <p>
+     *
+     */
     public void back_to_main_menu(View view) {
         finish();
     }
