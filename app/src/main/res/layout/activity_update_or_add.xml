@@ -93,7 +93,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="10"
                 android:onClick="add_food_company"
-                android:text="add food company(f.c)"
+                android:text="add food campany"
                 tools:ignore="OnClick" />
 
             <Space
@@ -109,6 +109,13 @@
                 android:onClick="update_fc_details"
                 android:text="update f.c details"
                 tools:ignore="OnClick" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:text="F.C - food company" />
 
             <Space
                 android:layout_width="match_parent"

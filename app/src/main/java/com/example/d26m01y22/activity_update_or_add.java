@@ -39,13 +39,20 @@ public class activity_update_or_add extends AppCompatActivity {
      * same screen to those two goals.
      * <p>
      *
-     * @param	view Description	button add worker
+     * @param	view Description	button update worker
      */
     public void update_worker(View view) {
         Intent si = new Intent(this,activity_input_worker.class);
         si.putExtra("mode",1);
         startActivity(si);
     }
+    /**
+     * click the button will take the user to make a new order screen (input meal)
+     * two screens to this goal.
+     * <p>
+     *
+     * @param	view Description	button make a new order
+     */
     public void make_new_order(View view) {
         Intent si = new Intent(this,activity_input_meal.class);
         startActivity(si);
@@ -78,7 +85,12 @@ public class activity_update_or_add extends AppCompatActivity {
         si.putExtra("mode",1);
         startActivity(si);
     }
-
+    /**
+     * click the button will take the user to the main menu
+     * <p>
+     *
+     * @param	view Description	button update food company
+     */
     public void back_to_main_menu(View view) {
         finish();
     }
