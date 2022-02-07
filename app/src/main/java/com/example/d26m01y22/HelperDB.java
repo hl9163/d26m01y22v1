@@ -5,13 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
 
+import com.example.d26m01y22.tabales.FoodCompany;
+import com.example.d26m01y22.tabales.Order_Details;
+
 import static com.example.d26m01y22.tabales.Workers.*;
 import static com.example.d26m01y22.tabales.FoodCompany.*;
 import static com.example.d26m01y22.tabales.Meals.*;
 import static com.example.d26m01y22.tabales.Order_Details.*;
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
- * @version	3.0
+ * @version	4.0
  * @since		27/01/2022
  * database helper
  */
@@ -64,7 +67,7 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         strCreate+=" "+DATE+" TEXT,";
         strCreate+=" "+TIME+" TEXT,";
         strCreate+=" "+WORKER_ID+" TEXT,";
-        strCreate+=" "+FFOOD_COMPANY+" TEXT";
+        strCreate+=" "+ Order_Details.FOOD_COMPANY+" TEXT";
         strCreate+=");";
         db.execSQL(strCreate);
 
@@ -77,7 +80,6 @@ public class HelperDB extends android.database.sqlite.SQLiteOpenHelper {
         db.execSQL(strDelete);
         strDelete="DROP TABLE IF EXISTS "+TABLE_FOOD_COMPANY;
         db.execSQL(strDelete);
-
         strDelete="DROP TABLE IF EXISTS "+TABLE_MEALS;
         db.execSQL(strDelete);
         strDelete="DROP TABLE IF EXISTS "+TABLE_ORDER_DETAILS;
