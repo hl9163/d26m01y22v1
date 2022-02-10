@@ -17,13 +17,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.d26m01y22.tabales.Workers;
+import com.example.d26m01y22.tabales.Order_Details;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
- * @version	1.0
+ * @version	1.7
  * @since		08/02/2022
  * show details screen.
  */
@@ -43,10 +44,15 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
     static ArrayList<String> tbl = new ArrayList<>();
     static ArrayList<String> sub_tbl = new ArrayList<>();
     static ArrayList<Integer>d1 =new ArrayList<>();
+    static ArrayList<String>d1_help =new ArrayList<>();
     static ArrayList<Integer>d2 =new ArrayList<>();
+    static ArrayList<String>d2_help =new ArrayList<>();
     static ArrayList<String>d3 =new ArrayList<>();
     static ArrayList<Integer> d3_index_helper =new ArrayList<>();
     static ArrayList<String>d3helper_copy =new ArrayList<>();
+    static ArrayList<String>empty =new ArrayList<>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -64,6 +70,7 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         hlp = new HelperDB(this);
         db = hlp.getWritableDatabase();
         db.close();
+        empty.add("");
 
         Intent gi = getIntent();
         mode = gi.getIntExtra("mode",-1);
@@ -77,9 +84,12 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         d1.clear();
         d2.clear();
         d3.clear();
+        d1_help.clear();
+        d2_help.clear();
         d3_index_helper.clear();
         d3helper_copy.clear();
         if (mode == 0){
+            Log.e("r","r");
             title.setText("show details of: worker");
             db = hlp.getWritableDatabase();
             crsr = db.query(Workers.TABLE_WORKERS, null, null, null, null, null, null);
@@ -107,10 +117,12 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
                     sub_details = ""+card+", "+phone_number+", working";
                     Log.e("activity_show_details",String.valueOf(index));
                     d1.add(index);
+                    d1_help.add(sub_details);
                 }else{
                    details = ""+personal_id+", "+first_name+" "+last_name+", "+worker_company;
                     sub_details = ""+card+", "+phone_number+", not working";
                     d2.add(index);
+                    d2_help.add(sub_details);
                 }
                 index++;
                 tbl.add(details);
@@ -121,8 +133,35 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             crsr.close();
             db.close();
             d3helper_copy = d3;
+            System.out.println(d1_help);
         }else if (mode == 1){
             title.setText("show details of: orders");
+            Log.e("g","g");
+            db = hlp.getWritableDatabase();
+            crsr = db.query(Order_Details.TABLE_ORDER_DETAILS, null, null, null, null, null, null);
+            int col1 = crsr.getColumnIndex(Order_Details.KEY_ID_OD);
+            int col2 = crsr.getColumnIndex(Order_Details.DATE);
+            int col3 = crsr.getColumnIndex(Order_Details.TIME);
+            int col4 = crsr.getColumnIndex(Order_Details.WORKER_ID);
+            int col5 = crsr.getColumnIndex(Order_Details.FOOD_COMPANY);
+            crsr.moveToFirst();
+            while (!crsr.isAfterLast()) {
+                String details;
+                int id = crsr.getInt(col1);
+                String date =  crsr.getString(col2);
+                String time = crsr.getString(col3);
+                String worker_id = crsr.getString(col4);
+                String food_company = crsr.getString(col5);
+                tbl.add(String.valueOf(id));
+                d1_help.add(food_company);
+                d2_help.add(time);
+                details = ""+date+", "+time+", "+worker_id+", "+food_company;
+                tbl.add(details);
+                crsr.moveToNext();
+            }
+            crsr.close();
+            db.close();
+
         }else if (mode == 2){
             title.setText("show details of: food companies");
         }
@@ -138,6 +177,7 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
 
 
 
+
     }
 
     public static void connect_spinner_values(){
@@ -148,9 +188,8 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             userOptions.add("Show only inactive employees");
             userOptions.add("sort by name");
         }else if (mode == 1){
-            userOptions.add("Show by time frame");
+            userOptions.add("by time frame");
             userOptions.add("company");
-            userOptions.add("main course");
         }else if (mode == 2){
             userOptions.add("Show only active food companies");
             userOptions.add("Show only inactive food companies");
@@ -164,22 +203,58 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         }
         return rev;
     }
+    public static ArrayList<String> sortList2(ArrayList<String>arr){
+        ArrayList<String> arrElements = new ArrayList<String>();
+        ArrayList<String> arr2 = new ArrayList<String>();
+        ArrayList<Integer> arr3 = new ArrayList<Integer>();
+
+        for (int i =0;i<arr.size();i++){
+            if (arrElements.isEmpty()){
+                arrElements.add(arr.get(i));
+            }else if (!arrElements.contains(arr.get(i))){
+                arrElements.add(arr.get(i));
+            }
+        }
+        System.out.println(arrElements);
+        for (int i =0;i<arrElements.size();i++){
+            String current = arrElements.get(i);
+            int occurrences = Collections.frequency(arr, current);
+            arr3.add(occurrences);
+        }
+        System.out.println(arr3);
+        while (!arrElements.isEmpty()){
+            int biggest = arr3.get(0);
+            int index = 0;
+            for (int i =0;i<arr3.size();i++){
+                if (arr3.get(i) > biggest){
+                    biggest = arr3.get(i);
+                    index = i;
+                }
+            }
+            arr2.add(arrElements.get(index));
+            arr3.remove(index);
+            arrElements.remove(index);
+        }
+
+        return arr2;
+    }
 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         moreDetails.setVisibility(View.VISIBLE);
         if (mode == 0){
+            Log.e("activity_show_details",d1_help.get(position));
             Log.e("activity_show_details",String.valueOf(spinner_pos));
             if (spinner_pos == 0){
                 sub_info_field.setText(sub_tbl.get(position));
 
             }else if (spinner_pos == 1){
-                sub_info_field.setText(sub_tbl.get(d1.get(position)));
-                // fix it to search by string like in the third
+                System.out.println(d1_help);
+                sub_info_field.setText(d1_help.get(position));
+
             }else if (spinner_pos == 2){
-                sub_info_field.setText(sub_tbl.get(d2.get(position)));
-                // fix it to search by string like in the third
+                sub_info_field.setText(d2_help.get(position));
             }else{
                 sub_info_field.setText(sub_tbl.get(d3_index_helper.get(position)));
             }
@@ -192,27 +267,25 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         ArrayList<String> result =new ArrayList<>();
         order.setVisibility(View.INVISIBLE);
+        spinner_pos = position;
         if (mode == 0){
             if (position == 0){
-                spinner_pos = position;
                 ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, tbl);
                 screen_list.setAdapter(adp_list);
             }else if(position == 1){
+
                 for (int i =0;i<d1.size();i++){
                     result.add(tbl.get(d1.get(i)));
                 }
                 ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
                 screen_list.setAdapter(adp_list);
-
             }else if(position == 2){
-                spinner_pos = position;
                 for (int i =0;i<d2.size();i++){
                     result.add(tbl.get(d2.get(i)));
                 }
                 ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
                 screen_list.setAdapter(adp_list);
             }else{
-                spinner_pos = position;
                 order.setVisibility(View.VISIBLE);
                 d3helper_copy = new ArrayList<String>(d3);
                 Collections.sort(d3);
@@ -224,7 +297,24 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
                 ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, d3);
                 screen_list.setAdapter(adp_list);
             }
-
+        }else if(mode == 1){
+            if (position == 0){
+                for (int i = 0;i<tbl.size();i++){
+                    if (i%2 != 0){
+                        result.add(tbl.get(i));
+                    }
+                }
+                ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
+                screen_list.setAdapter(adp_list);
+            }else if (position == 2){
+                order.setVisibility(View.VISIBLE);
+                result = sortList2(d1_help);
+                if (!order_pointer.isChecked()){
+                    result = mirror(result);
+                }
+                ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
+                screen_list.setAdapter(adp_list);
+            }
         }
     }
 
@@ -254,7 +344,13 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             organize_after_shorting();
             ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, d3);
             screen_list.setAdapter(adp_list);
-
+        }else if (mode == 1 && spinner_pos == 2){
+            ArrayList<String>result = sortList2(d1_help);
+            if (!order_pointer.isChecked()){
+                result = mirror(result);
+            }
+            ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
+            screen_list.setAdapter(adp_list);
         }
     }
     public void back_to_main_menu(View view) {
