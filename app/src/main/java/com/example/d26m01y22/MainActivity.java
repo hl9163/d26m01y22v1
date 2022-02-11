@@ -1,9 +1,12 @@
 package com.example.d26m01y22;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
@@ -41,6 +44,34 @@ public class MainActivity extends AppCompatActivity {
         Intent si = new Intent(this,showDetailsMenuActivity.class);
         startActivity(si);
     }
+    /**
+     * create the menu.
+     * <p>
+     *
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+    /**
+     * move to the credits activity.
+     * <p>
+     *
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.return_mainMenu){
+            Intent si = new Intent(this,MainActivity.class);
+            startActivity(si);
+            return true;
+        }else if(id == R.id.credits){
+            Intent si = new Intent(this,creditsActivity.class);
+            startActivity(si);
+            return true;
 
-
+        }
+        return true;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.d26m01y22;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -327,5 +330,35 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
      */
     public void back_to_main_menu(View view) {
         finish();
+    }
+    /**
+     * create the menu.
+     * <p>
+     *
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+    /**
+     * move to the credits activity.
+     * <p>
+     *
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.return_mainMenu){
+            Intent si = new Intent(this,MainActivity.class);
+            startActivity(si);
+            return true;
+        }else if(id == R.id.credits){
+            Intent si = new Intent(this,creditsActivity.class);
+            startActivity(si);
+            return true;
+
+        }
+        return true;
     }
 }
