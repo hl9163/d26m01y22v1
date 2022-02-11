@@ -40,7 +40,7 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
     SQLiteDatabase db;
     HelperDB hlp;
     Cursor crsr;
-    String[] columnsCompany = {"COMPANY_NAME"};
+    String[] columnsCompany = {"COMPANY_NAME","IS_WORKING"};
     String[] columnsWorker = {"PERSONAL_ID"};
     ArrayList<String> companyNames = new ArrayList<>();
     ArrayList<String> worker_id_tb = new ArrayList<>();
@@ -89,10 +89,14 @@ public class activity_complete_order extends AppCompatActivity implements Adapte
         db = hlp.getWritableDatabase();
         crsr = db.query(TABLE_FOOD_COMPANY,columnsCompany,null,null,null,null,null);
         int col1 = crsr.getColumnIndex(FoodCompany.COMPANY_NAME);
+        int col2 = crsr.getColumnIndex(FoodCompany.IS_WORKING_COMPANY);
         crsr.moveToFirst();
         while (!crsr.isAfterLast()) {
             String name = crsr.getString(col1);
-            companyNames.add(name);
+            int working = crsr.getInt(col2);
+            if (working == 1){
+                companyNames.add(name);
+            }
             crsr.moveToNext();
         }
         crsr.close();
