@@ -237,7 +237,11 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         screen_list.setAdapter(adp_list);
 
     }
-
+    /**
+     * make to the spinner the list of options to the user.
+     * <p>
+     *
+     */
     public static void connect_spinner_values(){
         userOptions.clear();
         userOptions.add("all:");
@@ -254,6 +258,12 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             userOptions.add("sort by name");
         }
     }
+    /**
+     * mirror the array list.
+     * <p>
+     * @param arr
+     * @return ArrayList<String> reverse arr.
+     */
     public static ArrayList<String> mirror(ArrayList<String> arr){
         ArrayList<String> rev = new ArrayList<String>();
         for (int i = arr.size()-1;i>=0;i--){
@@ -261,6 +271,13 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         }
         return rev;
     }
+    /**
+     * sort an array by popularity of String.
+     * <p>
+     * @param arr array of all the elements.
+     * @return ArrayList<String> array of all the elements by popularity of their appearance
+     * in the array
+     */
     public static ArrayList<String> sortList2(ArrayList<String>arr){
         ArrayList<String> arrElements = new ArrayList<String>();
         ArrayList<String> arr2 = new ArrayList<String>();
@@ -297,7 +314,11 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         return arr2;
     }
 
-
+    /**
+     * listView on click function.
+     * <p>
+     *
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         System.out.println(sub_tbl);
@@ -326,8 +347,11 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         }
     }
 
-
-
+    /**
+     * on item selected in the spinner.
+     * <p>
+     *
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         ArrayList<String> result =new ArrayList<>();
@@ -395,7 +419,11 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
+    /**
+     * after the sorting of d3 the function organize the index list in order to see the right sub-information.
+     * <p>
+     *
+     */
     public static void organize_after_shorting(){
         for (int i =0;i<d3helper_copy.size();i++){
             String current = d3.get(i);
@@ -406,6 +434,13 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             }
         }
     }
+    /**
+     * organize the time frames to show the frames ond not the hour.
+     * <p>
+     * @param arr not organized array
+     * @return organized array
+     *
+     */
     public static ArrayList<String> return_time_frame(ArrayList<String>arr){
         ArrayList<String> arr2 = new ArrayList<String>();
         arr = sortList2(arr);
@@ -416,6 +451,12 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         }
         return arr2;
     }
+    /**
+     * check if the input is number.
+     * <p>
+     * @param num random string
+     * @return if the string is a number
+     */
     public static boolean is_number(String num){
         try {
             int value = Integer.parseInt(num);
@@ -424,7 +465,11 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             return false;
         }
     }
-
+    /**
+     * make an action on click in the switch.
+     * <p>
+     * @param view switch
+     */
     public void actionToDiffrence_sw(View view) {
         if ((mode == 0 || mode == 2) && spinner_pos == 3){
             Collections.sort(d3);
@@ -451,6 +496,11 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             screen_list.setAdapter(adp_list);
         }
     }
+    /**
+     * return to the main menu
+     * <p>
+     *
+     */
     public void back_to_main_menu(View view) {
         finish();
     }
