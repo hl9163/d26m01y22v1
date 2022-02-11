@@ -18,13 +18,15 @@ import android.widget.TextView;
 
 import com.example.d26m01y22.tabales.Workers;
 import com.example.d26m01y22.tabales.Order_Details;
+import com.example.d26m01y22.tabales.Meals;
+import com.example.d26m01y22.tabales.FoodCompany;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
  * @author		Harel Leibovich <hl9163@bs.amalnet.k12.il>
- * @version	1.7
+ * @version	4.0
  * @since		08/02/2022
  * show details screen.
  */
@@ -154,16 +156,75 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
                 String food_company = crsr.getString(col5);
                 tbl.add(String.valueOf(id));
                 d1_help.add(food_company);
-                d2_help.add(time);
+                d2_help.add(time.substring(0,2));
                 details = ""+date+", "+time+", "+worker_id+", "+food_company;
                 tbl.add(details);
                 crsr.moveToNext();
             }
             crsr.close();
             db.close();
-
+            db = hlp.getWritableDatabase();
+            crsr = db.query(Meals.TABLE_MEALS, null, null, null, null, null, null);
+            col1 = crsr.getColumnIndex(Meals.APPETIZER);
+            col2 = crsr.getColumnIndex(Meals.MAIN_COURSE);
+            col3 = crsr.getColumnIndex(Meals.EXTRA);
+            col4 = crsr.getColumnIndex(Meals.DESSERT);
+            col5 = crsr.getColumnIndex(Meals.DRINK);
+            crsr.moveToFirst();
+            while (!crsr.isAfterLast()) {
+                String sub_details;
+                String appetizer = crsr.getString(col1);
+                String main_course = crsr.getString(col2);
+                String extra = crsr.getString(col3);
+                String dessert = crsr.getString(col4);
+                String drink = crsr.getString(col5);
+                sub_details = ""+appetizer+", "+main_course+", "+extra+", "+dessert+", "+drink;
+                sub_tbl.add(sub_details);
+                crsr.moveToNext();
+            }
+            crsr.close();
+            db.close();
         }else if (mode == 2){
             title.setText("show details of: food companies");
+            db = hlp.getWritableDatabase();
+            crsr = db.query(FoodCompany.TABLE_FOOD_COMPANY, null, null, null, null, null, null);
+            int col1 = crsr.getColumnIndex(FoodCompany.COMPANY_NUMBER);
+            int col2 = crsr.getColumnIndex(FoodCompany.COMPANY_NAME);
+            int col3 = crsr.getColumnIndex(FoodCompany.C_FIRST_PHONE_NUMBER);
+            int col4 = crsr.getColumnIndex(FoodCompany.C_SECOND_PHONE_NUMBER);
+            int col5 = crsr.getColumnIndex(FoodCompany.IS_WORKING_COMPANY);
+            crsr.moveToFirst();
+            int index = 0;
+            while (!crsr.isAfterLast()) {
+                String details;
+                String sub_details;
+                String company_number = crsr.getString(col1);
+                String company_name =  crsr.getString(col2);
+                String phone_number =  crsr.getString(col3);
+                String second_phone_number =  crsr.getString(col4);
+                int work_mode =  crsr.getInt(col5);
+                details = ""+company_number+", "+company_name;
+                if (work_mode == 1){
+                    sub_details = ""+phone_number+", "+second_phone_number+", working";
+                    d1.add(index);
+                    d1_help.add(sub_details);
+                }else {
+                    sub_details = ""+phone_number+", "+second_phone_number+", not working";
+                    d2.add(index);
+                    d2_help.add(sub_details);
+                }
+                index++;
+                tbl.add(details);
+                sub_tbl.add(sub_details);
+                d3.add(company_name);
+                crsr.moveToNext();
+            }
+            crsr.close();
+            db.close();
+            d3helper_copy = d3;
+
+
+
         }
 
         optionList.setOnItemSelectedListener(this);
@@ -174,9 +235,6 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         screen_list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, tbl);
         screen_list.setAdapter(adp_list);
-
-
-
 
     }
 
@@ -242,12 +300,16 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        moreDetails.setVisibility(View.VISIBLE);
-        if (mode == 0){
-            Log.e("activity_show_details",d1_help.get(position));
-            Log.e("activity_show_details",String.valueOf(spinner_pos));
+        System.out.println(sub_tbl);
+        moreDetails.setVisibility(View.INVISIBLE);
+        Log.e("dsfds",String.valueOf(spinner_pos));
+        if (mode == 0 || mode == 2){
+            moreDetails.setVisibility(View.VISIBLE);
             if (spinner_pos == 0){
+                System.out.println(sub_tbl);
+
                 sub_info_field.setText(sub_tbl.get(position));
+
 
             }else if (spinner_pos == 1){
                 System.out.println(d1_help);
@@ -258,6 +320,9 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             }else{
                 sub_info_field.setText(sub_tbl.get(d3_index_helper.get(position)));
             }
+        }else if (mode == 1 && spinner_pos == 0){
+            moreDetails.setVisibility(View.VISIBLE);
+            sub_info_field.setText(sub_tbl.get(position));
         }
     }
 
@@ -268,7 +333,7 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
         ArrayList<String> result =new ArrayList<>();
         order.setVisibility(View.INVISIBLE);
         spinner_pos = position;
-        if (mode == 0){
+        if (mode == 0 || mode == 2){
             if (position == 0){
                 ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, tbl);
                 screen_list.setAdapter(adp_list);
@@ -314,6 +379,14 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
                 }
                 ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
                 screen_list.setAdapter(adp_list);
+            }else if (position == 1){
+                order.setVisibility(View.VISIBLE);
+                result = return_time_frame(d2_help);
+                if (!order_pointer.isChecked()){
+                    result = mirror(result);
+                }
+                ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
+                screen_list.setAdapter(adp_list);
             }
         }
     }
@@ -333,9 +406,27 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             }
         }
     }
+    public static ArrayList<String> return_time_frame(ArrayList<String>arr){
+        ArrayList<String> arr2 = new ArrayList<String>();
+        arr = sortList2(arr);
+        for (int i=0;i<arr.size();i++){
+            if (is_number(arr.get(i))){
+                arr2.add(arr.get(i)+"<t<"+String.valueOf(Integer.parseInt(arr.get(i))+1));
+            }
+        }
+        return arr2;
+    }
+    public static boolean is_number(String num){
+        try {
+            int value = Integer.parseInt(num);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
+        }
+    }
 
     public void actionToDiffrence_sw(View view) {
-        if (mode == 0 && spinner_pos == 3){
+        if ((mode == 0 || mode == 2) && spinner_pos == 3){
             Collections.sort(d3);
             d3_index_helper.clear();
             if (order_pointer.isChecked()){
@@ -346,6 +437,13 @@ public class activity_show_details extends AppCompatActivity implements AdapterV
             screen_list.setAdapter(adp_list);
         }else if (mode == 1 && spinner_pos == 2){
             ArrayList<String>result = sortList2(d1_help);
+            if (!order_pointer.isChecked()){
+                result = mirror(result);
+            }
+            ArrayAdapter<String> adp_list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, result);
+            screen_list.setAdapter(adp_list);
+        }else if (mode == 1 && spinner_pos == 1){
+            ArrayList<String>result = return_time_frame(d2_help);
             if (!order_pointer.isChecked()){
                 result = mirror(result);
             }
