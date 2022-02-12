@@ -338,12 +338,7 @@ public class activity_input_worker extends AppCompatActivity {
      * for each mode it is changing - mode 0 - add worker -
      * on click it will begin the saving posses and jump to save_data() function
      * if the code is run on mode 1 - update worker details - the process dividing to two parts:
-     * part one is enter only the card and personal ids. |when I did this part there were 2 challenges:
-     * first: how to block those two editTexts (; . the second was: how i check properly the matching?
-     * the answer to the first challenge is a easy search in google (; . the answer to the second challenge is
-     * I combine two functions- the first is isAlreadyExist that search if the personal id and the card id
-     * are existing somewhere in the Workers's database and after reading the line of the personal id
-     * the program check if there is a matching in the cards id.|
+     * part one is enter only the card and personal ids.
      * second part is show the user all the current user data in the right place and save when he click save
      *
      * <p>
